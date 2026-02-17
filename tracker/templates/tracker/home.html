@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spiritual Discipline Tracker</title>
+</head>
+<body>
+    <h1>Welcome to Your Spiritual Tracker</h1>
+    {% if user.is_authenticated %}
+    <p>Logged in as {{ user.username }} |
+       <a href="/logout/">Logout</a></p>
+{% else %}
+    <a href="/login/">Login</a>
+{% endif %}
+
+
+    {% if user.is_authenticated %}
+        <h2>Your Spiritual Commitments:</h2>
+        <p><a href="/add/">Add New Commitment</a></p>
+        <ul>
+            {% for item in items %}
+                {% if item.completed_today %}
+    <strong>Completed Today ✅</strong>
+{% else %}
+    <form action="{% url 'complete_item' item.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Mark Completed Today</button>
+    </form>
+{% endif %}
+
+
+            {% empty %}
+                <li>No items yet.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Please log in to see your tracker.</p>
+    {% endif %}
+</body>
+</html>
